@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+#game-screen {
+    position: relative;
+    overflow: hidden;
+    background-image: url("../image/background-volcan.jpg");
+    background-size: 100%;
+    background-position-y: 32%;
+    background-repeat: no-repeat;
+    margin: 200px auto;
+}
+
+#score {
+    font-size: ;
+}
