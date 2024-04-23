@@ -12,18 +12,17 @@ class Dinosaur {
 
         this.dinoPos = {
             left: 20,
-            top: this.gameSize.h - this.dinoSize.h - 5,
+            top: this.gameSize.h - this.dinoSize.h - 20,
             base: this.gameSize.h - this.dinoSize.h - 20
         }
 
         this.dinoSpeed = {
-            left: 10,
+            left: 8,
             top: gameSize.h - this.dinoSize.h - 10,
-
         }
 
         this.dinoGravity = {
-            gravity: 0.6
+            gravity: 0.8
         }
 
 
@@ -51,24 +50,24 @@ class Dinosaur {
 
     move() {
 
-        if (this.dinoPos.top < this.dinoPos.base) {
+        if (this.dinoPos.top < this.dinoPos.base) {     // is jumping D:
             this.dinoPos.top += this.dinoSpeed.top;
             this.dinoSpeed.top += this.dinoGravity.gravity;
+            // this.dinoPos.left += 20;
+
         } else {
             this.dinoPos.top = this.dinoPos.base;
             this.dinoSpeed.top = 1;
         }
 
-
         this.updatePosition()
         this.checkBordersCollision()
-
     }
 
     jump() {
         if (this.dinoPos.top >= this.dinoPos.base) {
-            this.dinoPos.top -= 40;
-            this.dinoSpeed.top -= 8;
+            this.dinoPos.top -= 30;
+            this.dinoSpeed.top -= 15;
         }
     }
 
@@ -77,10 +76,6 @@ class Dinosaur {
     checkBordersCollision() {
         if (this.dinoPos.left >= this.gameSize.w - this.dinoSize.w) {
             this.moveLeft()
-        }
-
-        if (this.dinoPos.top >= this.gameSize.h - this.dinoSize.h) {
-            this.turnTop()
         }
 
         if (this.dinoPos.left <= 0) {
@@ -97,10 +92,6 @@ class Dinosaur {
         this.dinoPos.left -= this.dinoSpeed.left
     }
 
-    turnTop() {
-        this.dinoSpeed.top *= -1
-    }
-
     moveRight() {
         this.dinoPos.left += this.dinoSpeed.left
     }
@@ -109,4 +100,5 @@ class Dinosaur {
         this.dinoElement.style.left = `${this.dinoPos.left}px`
         this.dinoElement.style.top = `${this.dinoPos.top}px`
     }
+
 }

@@ -17,13 +17,12 @@ const Game = {
         JUMP: 'ArrowUp',
         RIGHT: 'ArrowRight',
         LEFT: 'ArrowLeft',
-
     },
 
     init() {
         this.setDimensions()
         this.start()
-        this.setDinoKeys()
+        this.setEventListeners()
     },
 
     setDimensions() {
@@ -35,17 +34,15 @@ const Game = {
     start() {
         this.startGameLoop()
         this.createDino()
-        this.setDinoKeys()
-        this.score()
-
     },
 
     createDino() {
         this.dinosaur = new Dinosaur(this.gameScreen, this.gameSize)
     },
 
-    setDinoKeys() {
+    setEventListeners() {
         document.onkeydown = event => {
+
             const { code } = event
 
             switch (code) {
@@ -55,7 +52,6 @@ const Game = {
                 case this.keys.RIGHT:
                     this.dinosaur.moveRight()
                     break
-
                 case this.keys.JUMP:
                     this.dinosaur.jump()
                     break;
@@ -74,7 +70,5 @@ const Game = {
     moveAll() {
         this.dinosaur.move()
     }
-
-    score()
 
 }
