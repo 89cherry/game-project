@@ -17,7 +17,7 @@ class Dinosaur {
         }
 
         this.dinoSpeed = {
-            left: 8,
+            left: 40,
             top: gameSize.h - this.dinoSize.h - 10,
         }
 
@@ -53,7 +53,7 @@ class Dinosaur {
         if (this.dinoPos.top < this.dinoPos.base) {     // is jumping D:
             this.dinoPos.top += this.dinoSpeed.top;
             this.dinoSpeed.top += this.dinoGravity.gravity;
-            // this.dinoPos.left += 20;
+            //this.dinoPos.left += 5;
 
         } else {
             this.dinoPos.top = this.dinoPos.base;
@@ -67,7 +67,7 @@ class Dinosaur {
     jump() {
         if (this.dinoPos.top >= this.dinoPos.base) {
             this.dinoPos.top -= 30;
-            this.dinoSpeed.top -= 15;
+            this.dinoSpeed.top -= 20;
         }
     }
 

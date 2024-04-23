@@ -14,14 +14,15 @@ class Obstacles {
         }
 
         this.obstaclePos = {
-            left: gameSize.w,
+            left: 0,
             top: this.gameSize.h - this.obstacleSize.h - 20,
             base: this.gameSize.h - this.obstacleSize.h - 20
 
         }
 
         this.obstacleVel = {
-            left: 7
+            left: 5
+
         }
 
         this.init()
@@ -41,7 +42,7 @@ class Obstacles {
     }
 
     move() {
-        this.obstaclePos.left -= this.obstacleVel.left
+        this.obstaclePos.left += this.obstacleVel.left
         this.updatePosition()
     }
 
