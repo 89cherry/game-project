@@ -1,19 +1,19 @@
 class Score {
 
 
-    constructor(gameScreen, gameSize, start) {
+    constructor(gameScreen, gameSize) {
 
         this.gameScreen = gameScreen
         this.gameSize = gameSize
         this.scoreSize = { w: gameSize.w, h: 50 }
-        this.start = start()
+
 
         this.scorePosition = {
             left: gameSize.w - 112,
             top: 20,
         }
 
-        // this.currentTime = 0
+        this.currentTime = 0
 
 
         this.init()
@@ -24,8 +24,8 @@ class Score {
     init() {
 
         this.scoreElement = document.createElement('h2');
-        this.scoreElement.id = 'contador';
-        this.scoreElement.textContent = '0000000000';
+        this.scoreElement.id = 'time-counter';
+        this.scoreElement.innerHTML = this.currentTime;
 
         this.scoreElement.style.position = "absolute"
         this.scoreElement.style.backgroundColor = `transparent`
@@ -43,11 +43,10 @@ class Score {
 
     }
 
-    // incrementScore() {
-    //     if this.start() {
-    //         this.currentTime++
-    //     }
-    // }
+    incrementTime() {
+        this.currentTime++;
+        document.getElementById('time-counter').innerHTML = this.currentTime;
+    }
 
 }
 

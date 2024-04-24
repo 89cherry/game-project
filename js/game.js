@@ -9,11 +9,13 @@ const Game = {
     dinosaur: undefined,
     obstacles: undefined,
     obstaclesMilk: undefined,
+    powerDown: undefined,
+    powerUp: undefined,
     obstaclesDensity: 400,
     obstaclesMilkDensity: 500,
     background: undefined,
-    score: 0,
-    lives: 3,
+    score: undefined,
+    lives: undefined,
     gameIsOver: false,
 
     keys: {
@@ -26,7 +28,8 @@ const Game = {
         this.setDimensions()
         this.start()
         this.setEventListeners()
-        this.incrementScore()
+
+
     },
 
     setDimensions() {
@@ -46,6 +49,10 @@ const Game = {
         this.obstacles = []
         this.obstaclesMilk = []
         this.score = new Score(this.gameScreen, this.gameSize)
+        this.powerUp = []
+        this.powerDown = []
+        this.lives = new Lives(this.gameScreen, this.gameSize)
+
     },
 
     setEventListeners() {
@@ -77,9 +84,13 @@ const Game = {
 
             this.generateObstacles()
             this.generateObstaclesMilk()
+            this.generatePowerUp()
+            this.generatePowerDown()
 
+            this.isCollisionPowerDown() && this.reduceLives()
             this.isCollision() && this.gameOver()
             this.isCollisionMilk() && this.gameOver()
+
 
         }, 30)
     },
@@ -87,6 +98,9 @@ const Game = {
         this.dinosaur.move()
         this.obstacles.forEach(obs => obs.move())
         this.obstaclesMilk.forEach(obs => obs.move())
+        this.score.incrementTime()
+        this.powerUp.forEach(pUp => pUp.move())
+        this.powerDown.forEach(pDown => pDown.move())
     },
 
     generateObstacles() {
@@ -101,10 +115,25 @@ const Game = {
             this.obstaclesMilk.push(new ObstaclesMilk(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
         }
 
-        // if (Math.random() > 0.80 && this.obstaclesMilk.length < 1003) {
-        //     this.obstaclesMilk.push(new ObstaclesMilk(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
-        // }
     },
+
+    generatePowerUp() {
+        if (this.framesCounter % this.PowerUpDensity === 0) {
+            this.powerUp.push(new PowerUp(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
+        }
+    },
+
+
+    generatePowerDown() {
+
+        if (this.framesCounter % this.obstaclesMilkDensity === 0) {
+            this.powerDown.push(new PowerDown(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
+        }
+
+    },
+
+
+
 
     clearAll() {
         this.obstacles.forEach((obs, idx) => {
@@ -120,13 +149,29 @@ const Game = {
                 this.obstaclesMilk.splice(idx, 1)
             }
         })
+
+        this.powerUp.forEach((obs, idx) => {
+            if (obs.powerUpPos.top <= 0) {
+                obs.powerUpElement.remove()
+                this.powerUp.splice(idx, 1)
+            }
+        })
+
+
+        this.powerDown.forEach((obs, idx) => {
+            if (obs.powerDownPos.top <= 0) {
+                obs.powerDownElement.remove()
+                this.powerDown.splice(idx, 1)
+            }
+        })
+
     },
 
     isCollision() {
         for (let i = 0; i < this.obstacles.length; i++) {
             if (
-                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w >= this.obstacles[i].obstaclePos.left &&
-                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h >= this.obstacles[i].obstaclePos.top &&
+                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w / 2 >= this.obstacles[i].obstaclePos.left &&
+                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h / 2 >= this.obstacles[i].obstaclePos.top &&
                 this.dinosaur.dinoPos.left <= this.obstacles[i].obstaclePos.left + this.obstacles[i].obstacleSize.w
             ) {
                 return true
@@ -138,8 +183,8 @@ const Game = {
     isCollisionMilk() {
         for (let i = 0; i < this.obstaclesMilk.length; i++) {
             if (
-                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w >= this.obstaclesMilk[i].obstacleMilkPos.left &&
-                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h >= this.obstaclesMilk[i].obstacleMilkPos.top &&
+                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w / 2 >= this.obstaclesMilk[i].obstacleMilkPos.left &&
+                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h / 2 >= this.obstaclesMilk[i].obstacleMilkPos.top &&
                 this.dinosaur.dinoPos.left <= this.obstaclesMilk[i].obstacleMilkPos.left + this.obstaclesMilk[i].obstacleMilkSize.w
             ) {
                 return true
@@ -148,7 +193,44 @@ const Game = {
 
     },
 
+    isCollisionPowerDown() {
+        for (let i = 0; i < this.powerDown.length; i++) {
+            if (
+                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h / 2 >= this.powerDown[i].powerDownPos.top &&
+                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w / 2 >= this.powerDown[i].powerDownPos.left &&
+                this.dinosaur.dinoPos.left <= this.powerDown[i].powerDownPos.left + this.powerDown[i].powerDownSize.w
+            ) {
+                // Eliminar el elemento powerDown si está fuera de la pantalla
+                if (this.powerDown[i].powerDownPos.top <= 0) {
+                    this.powerDown[i].powerDownElement.remove();
+                    this.powerDown.splice(i, 1);
+                }
+                return true;
+            }
+        }
+        return false;
+    },
+
+    reduceLives() {
+
+        if (this.isCollisionPowerDown() && this.lives.currentLives > 0) {
+
+            this.lives.currentLives -= 1;
+
+
+            this.lives.livesElement.innerHTML = this.lives.currentLives;
+
+
+            if (this.lives.currentLives === 0) {
+
+                this.gameOver();
+            }
+        }
+    },
+
+
+
     gameOver() {
-        console.log('GAME OVER')
+        alert('GAME OVER')
     }
 }
