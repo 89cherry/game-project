@@ -26,6 +26,7 @@ const Game = {
         this.setDimensions()
         this.start()
         this.setEventListeners()
+        this.incrementScore()
     },
 
     setDimensions() {
@@ -44,6 +45,7 @@ const Game = {
         this.dinosaur = new Dinosaur(this.gameScreen, this.gameSize)
         this.obstacles = []
         this.obstaclesMilk = []
+        this.score = new Score(this.gameScreen, this.gameSize)
     },
 
     setEventListeners() {
