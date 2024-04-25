@@ -18,6 +18,7 @@ class Lives {
     init() {
         this.livesElement = document.createElement('h2');
         this.livesElement.id = 'lives';
+
         this.livesElement.innerHTML = this.currentLives;
 
         this.livesElement.style.position = "absolute";
@@ -34,6 +35,7 @@ class Lives {
     }
 
     updateLives() {
-        this.livesElement.innerHTML = this.currentLives;
+        document.getElementById("lives").innerHTML = `LIVES: ${this.currentLives}`;
     }
 }
+

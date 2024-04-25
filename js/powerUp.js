@@ -15,12 +15,12 @@ class PowerUp {
 
         this.powerUpPos = {
             left: Math.random() * (this.gameSize.w - this.powerUpSize.w),
-            top: -this.powerUpSize.h,
+            top: 0,
             base: this.gameSize.h - this.powerUpSize.h - 20
         };
 
         this.powerUpVel = {
-            top: 2
+            top: 5
 
         }
 
@@ -41,8 +41,8 @@ class PowerUp {
     }
 
     move() {
-        this.powerUpPos.left += this.powerUpVel.left
-        this.updatePosition()
+        this.powerUpPos.top += this.powerUpVel.top;
+        this.updatePosition();
     }
 
     updatePosition() {

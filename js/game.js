@@ -28,8 +28,6 @@ const Game = {
         this.setDimensions()
         this.start()
         this.setEventListeners()
-
-
     },
 
     setDimensions() {
@@ -39,9 +37,7 @@ const Game = {
     },
 
     start() {
-        this.startGameLoop()
         this.createElements()
-
     },
 
     createElements() {
@@ -89,6 +85,7 @@ const Game = {
             this.gameSpeed()
 
             this.isCollisionPowerDown() && this.reduceLives()
+            this.isCollisionPowerUp() && this.sumLives()
             this.isCollision() && this.gameOver()
             this.isCollisionMilk() && this.gameOver()
 
@@ -119,7 +116,8 @@ const Game = {
     },
 
     generatePowerUp() {
-        if (this.framesCounter % this.PowerUpDensity === 0) {
+        // if (Math.random() > 0.80 && this.powerUp.length < 1) 
+        if (this.framesCounter % this.obstaclesDensity === 0) {
             this.powerUp.push(new PowerUp(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
         }
     },
@@ -127,13 +125,11 @@ const Game = {
 
     generatePowerDown() {
 
-        if (this.framesCounter % 10 === 0) {
+        if (this.framesCounter % this.obstaclesMilkDensity === 0) {
             this.powerDown.push(new PowerDown(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
         }
 
     },
-
-
 
 
     clearAll() {
@@ -194,13 +190,13 @@ const Game = {
 
     },
     isCollisionPowerDown() {
+        const dinoBottom = this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h; // Posición inferior del dinosaurio
         for (let i = 0; i < this.powerDown.length; i++) {
             if (
-                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h >= this.powerDown[i].powerDownPos.top &&
+                dinoBottom >= this.powerDown[i].powerDownPos.top && // Colisión con la parte inferior del dinosaurio
                 this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w >= this.powerDown[i].powerDownPos.left &&
                 this.dinosaur.dinoPos.left <= this.powerDown[i].powerDownPos.left + this.powerDown[i].powerDownSize.w
             ) {
-
                 this.powerDown[i].powerDownElement.remove();
                 this.powerDown.splice(i, 1);
                 return true;
@@ -210,20 +206,18 @@ const Game = {
     },
 
 
-
     isCollisionPowerUp() {
         for (let i = 0; i < this.powerUp.length; i++) {
             if (
-                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h / 2 >= this.powerUp[i].powerUpPos.top &&
-                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w / 2 >= this.powerUp[i].powerUpPos.left &&
+                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h >= this.powerUp[i].powerUpPos.top &&
+                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w >= this.powerUp[i].powerUpPos.left &&
                 this.dinosaur.dinoPos.left <= this.powerUp[i].powerUpPos.left + this.powerUp[i].powerUpSize.w
             ) {
-                // Eliminar el elemento powerDown si está fuera de la pantalla
-                if (this.powerUp[i].powerUpPos.top <= 0) {
-                    this.powerUp[i].powerUpElement.remove();
-                    this.powerUp.splice(i, 1);
-                }
+
+                this.powerUp[i].powerUpElement.remove();
+                this.powerUp.splice(i, 1);
                 return true;
+
             }
         }
         return false;
@@ -234,7 +228,7 @@ const Game = {
     reduceLives() {
         if (this.isCollisionPowerDown() && this.lives.currentLives > 0) {
             this.lives.currentLives -= 1;
-            this.lives.livesElement.innerHTML = this.lives.currentLives;
+            this.lives.updateLives()
             if (this.lives.currentLives === 0) {
                 this.gameOver();
             }
@@ -250,19 +244,24 @@ const Game = {
 
 
     sumLives() {
-        if (this.isCollisionPowerUp() && this.lives.currentLives > 0) {
-            this.lives.currentLives += 1;
-            this.lives.livesElement.innerHTML = this.lives.currentLives;
+        for (let i = 0; i < this.powerUp.length; i++) {
+            if (this.isCollisionPowerUp() && this.lives.currentLives > 0) {
+                this.lives.currentLives += 1;
+                this.lives.updateLives()
+                this.lives.livesElement.innerHTML = this.lives.currentLives;
 
-            this.powerUp.splice(i, 1);
+                this.powerUp[i].powerUpElement.remove();
+                this.powerUp.splice(i, 1);
+            }
         }
     },
+
 
     gameSpeed() {
         if (this.score.currentTime >= 300 && this.score.currentTime <= 400) {
 
             this.obstaclesMilk.forEach(milk => {
-                milk.obstacleMilkVel.left = 15; // Increment the speed
+                milk.obstacleMilkVel.left = 15;
             });
         }
         if (this.score.currentTime >= 600 && this.score.currentTime <= 800) {
@@ -277,6 +276,6 @@ const Game = {
 
 
     gameOver() {
-        // alert('GAME OVER')
+        alert(`SCORE: ${this.score.currentTime} GAME OVER`)
     }
 }

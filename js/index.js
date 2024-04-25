@@ -1,8 +1,12 @@
 
-window.onload = () => Game.init()
+window.onload = () => {
 
+    Game.init();
 
+    const startButton = document.getElementById("start-button")
 
-//boton de inicio + boton de restart....
+    startButton.addEventListener("click", () => {
+        Game.startGameLoop()
+    })
 
-
+}

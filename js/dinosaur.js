@@ -1,3 +1,4 @@
+
 class Dinosaur {
 
     constructor(gameScreen, gameSize) {
@@ -86,6 +87,8 @@ class Dinosaur {
             this.turnTop()
 
         }
+
+
     }
 
     moveLeft() {
@@ -94,6 +97,10 @@ class Dinosaur {
 
     moveRight() {
         this.dinoPos.left += this.dinoSpeed.left
+    }
+
+    turnTop() {
+        this.dinoSpeed.top *= -1
     }
 
     updatePosition() {

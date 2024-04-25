@@ -1,5 +1,9 @@
 class PowerDown {
+
+
     constructor(gameScreen, gameSize, dinoPos, dinoSize) {
+
+
         this.gameScreen = gameScreen;
         this.gameSize = gameSize;
         this.dinoPos = dinoPos;

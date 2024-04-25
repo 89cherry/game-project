@@ -9,7 +9,7 @@ class Score {
 
 
         this.scorePosition = {
-            left: gameSize.w - 112,
+            left: gameSize.w - 180,
             top: 20,
         }
 
@@ -45,7 +45,7 @@ class Score {
 
     incrementTime() {
         this.currentTime++;
-        document.getElementById('time-counter').innerHTML = this.currentTime;
+        document.getElementById('time-counter').innerHTML = `SCORE: ${this.currentTime}`;
     }
 
 }

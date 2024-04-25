@@ -32,7 +32,7 @@ class Obstacles {
         this.obstacleElement = document.createElement('img')
         this.obstacleElement.src = "./image/milkshake.png"
 
-        this.obstacleElement.style.background = "red"
+        this.obstacleElement.style.background = "transparent"
         this.obstacleElement.style.position = "absolute"
         this.obstacleElement.style.width = `${this.obstacleSize.w}px`
         this.obstacleElement.style.height = `${this.obstacleSize.h}px`
