@@ -1,18 +1,44 @@
 * {
     margin: 0;
     padding: 0;
+
+}
+
+
+#start-button {
+    overflow: hidden;
+    position: relative;
+    background-image: url("../image/dinosaurus.png");
+    display: flex;
+    align-content: center;
+    background-repeat: no-repeat;
+    background-position: center 20px;
+    align-items: center;
+    justify-content: center;
+    background-size: 40%;
+    height: 180px;
+
+
 }
 
 
 #game-screen {
     position: relative;
     overflow: hidden;
+    display: flex;
     background-image: url("../image/jungle.jpg");
     background-size: 100%;
     background-position-y: 32%;
     background-repeat: no-repeat;
+    background-color: white;
+    padding-top: 2px;
     margin: 200px auto;
+    margin-top: 100px;
+
+
+
 }
 
-/* #body {
-    color: #efc044; */
+body {
+    background-color: #efc044;
+}

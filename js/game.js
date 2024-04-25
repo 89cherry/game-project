@@ -86,6 +86,7 @@ const Game = {
             this.generateObstaclesMilk()
             this.generatePowerUp()
             this.generatePowerDown()
+            this.gameSpeed()
 
             this.isCollisionPowerDown() && this.reduceLives()
             this.isCollision() && this.gameOver()
@@ -126,7 +127,7 @@ const Game = {
 
     generatePowerDown() {
 
-        if (this.framesCounter % this.obstaclesMilkDensity === 0) {
+        if (this.framesCounter % 10 === 0) {
             this.powerDown.push(new PowerDown(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
         }
 
@@ -192,18 +193,35 @@ const Game = {
         }
 
     },
-
     isCollisionPowerDown() {
         for (let i = 0; i < this.powerDown.length; i++) {
             if (
-                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h / 2 >= this.powerDown[i].powerDownPos.top &&
-                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w / 2 >= this.powerDown[i].powerDownPos.left &&
+                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h >= this.powerDown[i].powerDownPos.top &&
+                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w >= this.powerDown[i].powerDownPos.left &&
                 this.dinosaur.dinoPos.left <= this.powerDown[i].powerDownPos.left + this.powerDown[i].powerDownSize.w
             ) {
+
+                this.powerDown[i].powerDownElement.remove();
+                this.powerDown.splice(i, 1);
+                return true;
+            }
+        }
+        return false;
+    },
+
+
+
+    isCollisionPowerUp() {
+        for (let i = 0; i < this.powerUp.length; i++) {
+            if (
+                this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h / 2 >= this.powerUp[i].powerUpPos.top &&
+                this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w / 2 >= this.powerUp[i].powerUpPos.left &&
+                this.dinosaur.dinoPos.left <= this.powerUp[i].powerUpPos.left + this.powerUp[i].powerUpSize.w
+            ) {
                 // Eliminar el elemento powerDown si está fuera de la pantalla
-                if (this.powerDown[i].powerDownPos.top <= 0) {
-                    this.powerDown[i].powerDownElement.remove();
-                    this.powerDown.splice(i, 1);
+                if (this.powerUp[i].powerUpPos.top <= 0) {
+                    this.powerUp[i].powerUpElement.remove();
+                    this.powerUp.splice(i, 1);
                 }
                 return true;
             }
@@ -211,26 +229,54 @@ const Game = {
         return false;
     },
 
+
+
     reduceLives() {
-
         if (this.isCollisionPowerDown() && this.lives.currentLives > 0) {
-
             this.lives.currentLives -= 1;
-
-
             this.lives.livesElement.innerHTML = this.lives.currentLives;
-
-
             if (this.lives.currentLives === 0) {
-
                 this.gameOver();
             }
+        }
+
+        this.powerDown.forEach((obs, idx) => {
+            if (obs.powerDownPos.top <= 0) {
+                obs.powerDownElement.remove();
+                this.powerDown.splice(idx, 1);
+            }
+        });
+    },
+
+
+    sumLives() {
+        if (this.isCollisionPowerUp() && this.lives.currentLives > 0) {
+            this.lives.currentLives += 1;
+            this.lives.livesElement.innerHTML = this.lives.currentLives;
+
+            this.powerUp.splice(i, 1);
+        }
+    },
+
+    gameSpeed() {
+        if (this.score.currentTime >= 300 && this.score.currentTime <= 400) {
+
+            this.obstaclesMilk.forEach(milk => {
+                milk.obstacleMilkVel.left = 15; // Increment the speed
+            });
+        }
+        if (this.score.currentTime >= 600 && this.score.currentTime <= 800) {
+            // Increment speed of obstacles
+            this.obstacles.forEach(eachObs => {
+                eachObs.obstacleVel.left = 15; // Increment the speed
+            });
         }
     },
 
 
 
+
     gameOver() {
-        alert('GAME OVER')
+        // alert('GAME OVER')
     }
 }

@@ -9,8 +9,8 @@ class Obstacles {
 
 
         this.obstacleSize = {
-            w: 100,
-            h: 100
+            w: 80,
+            h: 80
         }
 
         this.obstaclePos = {

@@ -14,8 +14,8 @@ class PowerUp {
         }
 
         this.powerUpPos = {
-            left: Math.random() * (this.gameSize.w - this.powerUpSize.w), // Random horizontal position
-            top: -this.powerUpSize.h, // Start above the game screen
+            left: Math.random() * (this.gameSize.w - this.powerUpSize.w),
+            top: -this.powerUpSize.h,
             base: this.gameSize.h - this.powerUpSize.h - 20
         };
 

@@ -30,8 +30,10 @@ class Lives {
         this.livesElement.style.color = 'white';
 
 
-        this.livesElement.style.zIndex = '1000';
-
         document.querySelector('#game-screen').appendChild(this.livesElement);
+    }
+
+    updateLives() {
+        this.livesElement.innerHTML = this.currentLives;
     }
 }
