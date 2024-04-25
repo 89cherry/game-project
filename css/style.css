@@ -24,7 +24,7 @@
     position: relative;
     overflow: hidden;
     display: flex;
-    background-image: url("../image/jungle.jpg");
+    background-image: url(../image/jungle.jpg);
     background-size: 100%;
     background-position-y: 32%;
     background-repeat: no-repeat;

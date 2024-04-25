@@ -13,8 +13,9 @@ const Game = {
     powerUp: undefined,
     obstaclesDensity: 400,
     obstaclesMilkDensity: 500,
-    background: undefined,
+
     score: undefined,
+    background: undefined,
     lives: undefined,
     gameIsOver: false,
 
@@ -48,6 +49,7 @@ const Game = {
         this.powerUp = []
         this.powerDown = []
         this.lives = new Lives(this.gameScreen, this.gameSize)
+
 
     },
 
@@ -190,10 +192,10 @@ const Game = {
 
     },
     isCollisionPowerDown() {
-        const dinoBottom = this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h; // Posición inferior del dinosaurio
+        const dinoBottom = this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h;
         for (let i = 0; i < this.powerDown.length; i++) {
             if (
-                dinoBottom >= this.powerDown[i].powerDownPos.top && // Colisión con la parte inferior del dinosaurio
+                dinoBottom >= this.powerDown[i].powerDownPos.top &&
                 this.dinosaur.dinoPos.left + this.dinosaur.dinoSize.w >= this.powerDown[i].powerDownPos.left &&
                 this.dinosaur.dinoPos.left <= this.powerDown[i].powerDownPos.left + this.powerDown[i].powerDownSize.w
             ) {
@@ -258,20 +260,24 @@ const Game = {
 
 
     gameSpeed() {
-        if (this.score.currentTime >= 300 && this.score.currentTime <= 400) {
-
+        if (this.score.currentTime >= 400 && this.score.currentTime <= 500) {
             this.obstaclesMilk.forEach(milk => {
                 milk.obstacleMilkVel.left = 15;
             });
         }
-        if (this.score.currentTime >= 600 && this.score.currentTime <= 800) {
+        if (this.score.currentTime >= 600 && this.score.currentTime <= 1000) {
             // Increment speed of obstacles
             this.obstacles.forEach(eachObs => {
                 eachObs.obstacleVel.left = 15; // Increment the speed
             });
         }
+        if (this.score.currentTime >= 1500 && this.score.currentTime <= 2000) {
+            // Increment speed of obstacles
+            this.obstacles.forEach(eachObs => {
+                eachObs.obstacleVel.left = 20; // Increment the speed
+            });
+        }
     },
-
 
 
 

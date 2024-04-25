@@ -88,6 +88,12 @@ class Dinosaur {
 
         }
 
+        if (this.dinoPos.base <= 0) {
+
+
+            this.moveBase()
+        }
+
 
     }
 
@@ -100,7 +106,12 @@ class Dinosaur {
     }
 
     turnTop() {
-        this.dinoSpeed.top *= -1
+        this.dinoPos.top *= 1
+    }
+
+    moveBase() {
+        this.dinoPos.base *= -1
+
     }
 
     updatePosition() {
