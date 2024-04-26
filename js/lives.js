@@ -35,7 +35,7 @@ class Lives {
     }
 
     updateLives() {
-        document.getElementById("lives").innerHTML = `LIVES: ${this.currentLives}`;
+        document.getElementById("lives").innerHTML = `❤️ ${this.currentLives}`;
     }
 }
 

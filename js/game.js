@@ -79,7 +79,6 @@ const Game = {
 
             this.drawAll()
             this.clearAll()
-
             this.generateObstacles()
             this.generateObstaclesMilk()
             this.generatePowerUp()
@@ -119,7 +118,7 @@ const Game = {
 
     generatePowerUp() {
         // if (Math.random() > 0.80 && this.powerUp.length < 1) 
-        if (this.framesCounter % this.obstaclesDensity === 0) {
+        if (this.framesCounter % 50 === 0) {
             this.powerUp.push(new PowerUp(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
         }
     },
@@ -127,7 +126,7 @@ const Game = {
 
     generatePowerDown() {
 
-        if (this.framesCounter % this.obstaclesMilkDensity === 0) {
+        if (this.framesCounter % 50 === 0) {
             this.powerDown.push(new PowerDown(this.gameScreen, this.gameSize, this.dinosaur.dinoPos, this.dinosaur.dinoSize))
         }
 
@@ -192,7 +191,9 @@ const Game = {
 
     },
     isCollisionPowerDown() {
+
         const dinoBottom = this.dinosaur.dinoPos.top + this.dinosaur.dinoSize.h;
+
         for (let i = 0; i < this.powerDown.length; i++) {
             if (
                 dinoBottom >= this.powerDown[i].powerDownPos.top &&
@@ -201,7 +202,12 @@ const Game = {
             ) {
                 this.powerDown[i].powerDownElement.remove();
                 this.powerDown.splice(i, 1);
+                this.lives.currentLives -= 1;
+                this.lives.updateLives()
                 return true;
+            }
+            if (this.lives.currentLives === 0) {
+                this.gameOver();
             }
         }
         return false;
@@ -218,6 +224,8 @@ const Game = {
 
                 this.powerUp[i].powerUpElement.remove();
                 this.powerUp.splice(i, 1);
+                this.lives.currentLives += 1;
+                this.lives.updateLives()
                 return true;
 
             }
@@ -227,36 +235,38 @@ const Game = {
 
 
 
-    reduceLives() {
-        if (this.isCollisionPowerDown() && this.lives.currentLives > 0) {
-            this.lives.currentLives -= 1;
-            this.lives.updateLives()
-            if (this.lives.currentLives === 0) {
-                this.gameOver();
-            }
-        }
+    // reduceLives() {
+    //     if (this.isCollisionPowerDown() && this.lives.currentLives > 0) {
+    //         this.lives.currentLives -= 1;
+    //         alert(this.lives.currentLives)
+    //         this.lives.updateLives()
+    //         if (this.lives.currentLives === 0) {
+    //             this.gameOver();
+    //         }
+    //     }
 
-        this.powerDown.forEach((obs, idx) => {
-            if (obs.powerDownPos.top <= 0) {
-                obs.powerDownElement.remove();
-                this.powerDown.splice(idx, 1);
-            }
-        });
-    },
+    //     this.powerDown.forEach((obs, idx) => {
+    //         if (obs.powerDownPos.top <= 0) {
+    //             // obs.powerDownElement.remove();
+    //             obs.powerDownElement.style.background = 'red'
+    //             // this.powerDown.splice(idx, 1);
+    //         }
+    //     });
+    // },
 
 
-    sumLives() {
-        for (let i = 0; i < this.powerUp.length; i++) {
-            if (this.isCollisionPowerUp() && this.lives.currentLives > 0) {
-                this.lives.currentLives += 1;
-                this.lives.updateLives()
-                this.lives.livesElement.innerHTML = this.lives.currentLives;
+    // sumLives() {
+    //     for (let i = 0; i < this.powerUp.length; i++) {
+    //         if (this.isCollisionPowerUp() && this.lives.currentLives > 0) {
+    //             this.lives.currentLives += 1;
+    //             this.lives.updateLives()
+    //             this.lives.livesElement.innerHTML = this.lives.currentLives;
 
-                this.powerUp[i].powerUpElement.remove();
-                this.powerUp.splice(i, 1);
-            }
-        }
-    },
+    //             this.powerUp[i].powerUpElement.remove();
+    //             this.powerUp.splice(i, 1);
+    //         }
+    //     }
+    // },
 
 
     gameSpeed() {
